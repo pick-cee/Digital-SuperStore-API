@@ -1,15 +1,6 @@
 import { Types, Schema, model } from "mongoose"
 
-interface ICustomer  {
-    name: string,
-    email: string,
-    password: string,
-    orders: Types.ObjectId,
-    wishlist: Types.ObjectId,
-    cart: Types.ObjectId
-}
-
-const customerSchema = new Schema<ICustomer>({
+const customerSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -34,6 +25,6 @@ const customerSchema = new Schema<ICustomer>({
         type: Schema.Types.ObjectId,
         ref: "Cart"
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
-export default model<ICustomer>('Customer', customerSchema)
+export default model('Customer', customerSchema)
