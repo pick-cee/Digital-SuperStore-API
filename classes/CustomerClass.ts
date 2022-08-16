@@ -1,6 +1,6 @@
 import { BaseUser } from "./BaseClass";
 
-export class CustomerClass extends BaseUser {
+export class CustomerClass extends BaseUser{
     private customerId: string;
     private orders: object;
     private wishlist: object;

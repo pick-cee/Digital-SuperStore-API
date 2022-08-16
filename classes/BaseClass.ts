@@ -11,32 +11,32 @@ export class BaseUser {
     }
 
     // getter for name
-    public get name1(){
+    public get Name(){
         return this.name
     }
 
     //setter for name
-    public set name1(name: string){
+    public set Name(name: string){
         this.name = name
     }
 
     // getter for email
-    public get email1(){
+    public get Email(){
         return this.name
     }
 
     //setter for email
-    public set email1(email: string){
+    public set Email(email: string){
         this.email = email
     }
 
     // getter for password
-    public get password1(){
+    public get Password(){
         return this.name
     }
 
     //setter for password
-    public set password1(password: string){
+    public set Password(password: string){
         this.password = password
     }
 }
