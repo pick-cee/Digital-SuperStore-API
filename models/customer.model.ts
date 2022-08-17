@@ -13,6 +13,13 @@ const customerSchema = new Schema({
         type: String,
         required: true
     },
+    token: {
+        type: String
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
     orders: {
         type: Schema.Types.ObjectId,
         ref: "Order"

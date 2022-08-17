@@ -1,21 +1,10 @@
 import customerModel from "../models/customer.model";
-import { passwordHash, passwordCompare } from "../helpers/bcrypt"
+import baseService from "./baseService";
 
-class customerService {
-    #customer: any;
+const BaseService = new baseService()
 
-    async authenticate(email: string, password: string) {
-        this.#customer = await customerModel.findOne({ email: email }).exec();
-        if (!this.#customer) return false;
+class customerService extends baseService {
 
-        const matchPassword = await passwordCompare(password, this.#customer.password)
-        if (!matchPassword) return false;
-
-        delete this.#customer.password
-
-        return this.#customer
-
-    }
 }
 
 export default customerService
