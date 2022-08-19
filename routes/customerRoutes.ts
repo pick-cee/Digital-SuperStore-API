@@ -1,8 +1,10 @@
 import express from 'express'
 import {
     forgotPassword, getByEmail, getById,
-    loginCustomer, registerCustomer, resendToken, resetPassword, verifyEmail
+    loginCustomer, registerCustomer, resendToken, resetPassword, verifyEmail,
+    addProductsToCart, deleteProductsFromCart, addProductsToWishlist, deleteProductsFromWishlist
 } from '../controllers/customer.controller'
+import verifyToken from '../middlewares/verifyUserToken'
 
 const router = express.Router()
 
@@ -14,4 +16,8 @@ router.get('/getByEmail', getByEmail)
 router.get('/getById/:id', getById)
 router.post('/verifyEmail', verifyEmail)
 router.post('/resendToken', resendToken)
+router.post('/addProductsToCart', verifyToken, addProductsToCart)
+router.delete('/removeProductsFromCart', verifyToken, deleteProductsFromCart)
+router.post('/addProductsToWishlist', verifyToken, addProductsToWishlist)
+router.delete('/removeProductsFromWishlist', verifyToken, deleteProductsFromWishlist)
 export default router

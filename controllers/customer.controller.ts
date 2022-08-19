@@ -1,12 +1,19 @@
-import baseService from "../services/baseService";
 import customerService from "../services/customerService";
-import express from "express";
+import express, { response } from "express";
 import { sendmail } from "../helpers/mailer"
 import { jwtSign } from "../helpers/auth";
 import generateToken from '../helpers/generateToken'
 import customerModel from "../models/customer.model";
 
 const CustomerService = new customerService()
+
+async function isEmailVerified(userId: string) {
+    const user = await customerModel.findOne({ _id: userId })
+    if (user?.isVerified == false) {
+        throw new Error("Email is not verified")
+    }
+    return
+}
 
 export async function registerCustomer(request: express.Request, response: express.Response) {
     try {
@@ -31,7 +38,6 @@ export async function registerCustomer(request: express.Request, response: expre
         })
     }
     catch (err: any) {
-        console.log(err.message)
         return response.status(500).json({
             message: `Error: ${err.message}`
         })
@@ -58,7 +64,6 @@ export async function loginCustomer(request: express.Request, response: express.
         })
     }
     catch (err: any) {
-        console.log(err)
         return response.status(500).json({
             message: err.message
         })
@@ -74,7 +79,6 @@ export async function forgotPassword(request: express.Request, response: express
         })
     }
     catch (err: any) {
-        console.log(err.message)
         return response.status(500).json({
             message: err.message
         })
@@ -90,7 +94,6 @@ export async function resetPassword(request: express.Request, response: express.
         })
     }
     catch (err: any) {
-        console.log(err.message)
         return response.status(500).json({
             message: err.message
         })
@@ -107,7 +110,6 @@ export async function getByEmail(request: express.Request, response: express.Res
         })
     }
     catch (err: any) {
-        console.log(err.message)
         return response.status(500).json({ message: err.message })
     }
 }
@@ -122,7 +124,6 @@ export async function getById(request: express.Request, response: express.Respon
         })
     }
     catch (err: any) {
-        console.log(err.message)
         return response.status(500).json({ message: err.message })
     }
 }
@@ -137,7 +138,6 @@ export async function verifyEmail(request: express.Request, response: express.Re
         })
     }
     catch (err: any) {
-        console.log(err.message)
         return response.status(500).json({ message: err.message })
     }
 }
@@ -152,7 +152,76 @@ export async function resendToken(request: express.Request, response: express.Re
         })
     }
     catch (err: any) {
-        console.log(err.message)
         return response.status(500).json({ message: err.message })
     }
 }
+
+export async function addProductsToCart(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    const productId = request.query.productId as string
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.addProductsToCart(userId, productId)
+        return response.status(200).json({
+            message: "Products added to cart successfully",
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            messaage: err.message
+        })
+    }
+}
+
+export async function deleteProductsFromCart(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    const productId = request.query.productId as string
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.removeProductsToCart(userId, productId)
+        return response.status(200).json({
+            message: "Products removed from cart successfully"
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function addProductsToWishlist(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    const productId = request.query.productId as string
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.addProductsToWishlist(userId, productId)
+        return response.status(200).json({
+            message: "Product added to wishlist successfully"
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function deleteProductsFromWishlist(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    const productId = request.query.productId as string
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.deleteProductsFromWishlist(userId, productId)
+        return response.status(200).json({
+            message: "Product removed from wishlist successfully"
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function makePayment(request: express.Request, response: express.Response) { }

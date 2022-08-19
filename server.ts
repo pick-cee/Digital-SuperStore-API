@@ -4,6 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import morgan from 'morgan'
 import customerRoutes from './routes/customerRoutes'
+import adminRoutes from './routes/admin/adminRoutes'
 
 dotenv.config()
 const port = process.env.PORT
@@ -28,6 +29,9 @@ app.get("/", (request, response) => {
 
 // customer routes 
 app.use('/customer', customerRoutes)
+
+// admin routes
+app.use('/admin', adminRoutes)
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`)
