@@ -1,4 +1,5 @@
 import customerService from "../services/customerService";
+import mongoose from "mongoose";
 import express, { response } from "express";
 import { sendmail } from "../helpers/mailer"
 import { jwtSign } from "../helpers/auth";
@@ -157,11 +158,14 @@ export async function resendToken(request: express.Request, response: express.Re
 }
 
 export async function addProductsToCart(request: express.Request, response: express.Response) {
+    // const userId = request.query.userId as string
     const userId = request.query.userId as string
     const productId = request.query.productId as string
+    const { quantity } = request.body
+
     try {
         await isEmailVerified(userId)
-        await CustomerService.addProductsToCart(userId, productId)
+        await CustomerService.addProductsToCart(userId, productId, quantity)
         return response.status(200).json({
             message: "Products added to cart successfully",
         })
@@ -215,6 +219,40 @@ export async function deleteProductsFromWishlist(request: express.Request, respo
         await CustomerService.deleteProductsFromWishlist(userId, productId)
         return response.status(200).json({
             message: "Product removed from wishlist successfully"
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function makeOrder(request: express.Request, response: express.Response) {
+    const cartId = request.query.cartId as string
+    const userId = request.query.userId as string
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.makeOrder(userId, cartId)
+        return response.status(200).json({
+            message: "Order made successfully"
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function deleteOrder(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    const orderId = request.query.orderId as string
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.deleteOrder(userId, orderId)
+        return response.status(200).json({
+            message: "Order deleted successfully!"
         })
     }
     catch (err: any) {

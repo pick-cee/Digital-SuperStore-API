@@ -13,7 +13,7 @@ export async function sendmail(msg: string, subject: any, reciever: string) {
                 pass: process.env.EMAIL_PASS,
             },
             tls: {
-                rejectUnauthorized: false
+                rejectUnauthorized: false,
             }
         })
         const mailOptions = {

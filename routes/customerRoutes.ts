@@ -2,7 +2,8 @@ import express from 'express'
 import {
     forgotPassword, getByEmail, getById,
     loginCustomer, registerCustomer, resendToken, resetPassword, verifyEmail,
-    addProductsToCart, deleteProductsFromCart, addProductsToWishlist, deleteProductsFromWishlist
+    addProductsToCart, deleteProductsFromCart, addProductsToWishlist,
+    deleteProductsFromWishlist, makeOrder, deleteOrder
 } from '../controllers/customer.controller'
 import verifyToken from '../middlewares/verifyUserToken'
 
@@ -20,4 +21,6 @@ router.post('/addProductsToCart', verifyToken, addProductsToCart)
 router.delete('/removeProductsFromCart', verifyToken, deleteProductsFromCart)
 router.post('/addProductsToWishlist', verifyToken, addProductsToWishlist)
 router.delete('/removeProductsFromWishlist', verifyToken, deleteProductsFromWishlist)
+router.post('/makeOrder', verifyToken, makeOrder)
+router.delete('/deleteOrder', verifyToken, deleteOrder)
 export default router

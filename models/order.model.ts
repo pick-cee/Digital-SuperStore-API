@@ -5,18 +5,13 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true,
     },
-    products: [
-        {
-            productId: {
-                type: mongoose.Types.ObjectId
-            },
-            quantity: {
-                type: Number,
-                default: 1
-            },
-            required: true
-        },
-    ],
+    cartId: {
+        type: mongoose.Types.ObjectId
+    },
+    status: {
+        type: String,
+        default: "pending..."
+    },
     transactionId: {
         type: String,
     }
