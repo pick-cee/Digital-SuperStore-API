@@ -1,6 +1,6 @@
 import customerService from "../services/customerService";
 import mongoose from "mongoose";
-import express, { response } from "express";
+import express, { request, response } from "express";
 import { sendmail } from "../helpers/mailer"
 import { jwtSign } from "../helpers/auth";
 import generateToken from '../helpers/generateToken'
@@ -262,4 +262,38 @@ export async function deleteOrder(request: express.Request, response: express.Re
     }
 }
 
-export async function makePayment(request: express.Request, response: express.Response) { }
+export async function makePayment(request: express.Request, response: express.Response) {
+    const orderId = request.query.orderId as string
+    const { email, name } = request.body
+    try {
+        await CustomerService.makePayment(orderId, email, name).then((data) => {
+            return response.status(200).json({
+                message: "Payment made successfully",
+                Data: data
+            })
+
+        })
+
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+export async function verifyPayment(request: express.Request, response: express.Response) {
+    const orderId = request.query.orderId as string
+    try {
+        await CustomerService.verifyPayment(orderId).then((data) => {
+            return response.status(200).json({
+                message: "Payment verified successfully",
+                Data: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}

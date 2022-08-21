@@ -123,3 +123,36 @@ export async function updateProduct(request: express.Request, response: express.
         })
     }
 }
+
+export async function getUserStats(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    try {
+        await AdminService.getUserMonthlyStats(userId).then((data) => {
+            return response.status(200).json({
+                message: `User ${userId} monthly stats fetched`,
+                Data: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function getAllUserStats(request: express.Request, response: express.Response) {
+    try {
+        await AdminService.getAllUsersMonthlyStats().then((data) => {
+            return response.status(200).json({
+                message: "All users monthly stats fetched successfully",
+                Data: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}

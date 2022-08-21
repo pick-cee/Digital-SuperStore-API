@@ -4,7 +4,13 @@ import productModel from '../models/product.model'
 import cartModel from "../models/cart.model";
 import orderModel from "../models/order.model"
 import baseService from "./baseService";
-import { AnyARecord } from "dns";
+import transactionModel from '../models/transaction.model'
+import dotenv from 'dotenv'
+dotenv.config()
+import randToken from 'rand-token'
+import * as paystack from "paystack";
+const p = paystack.default(`${process.env.PAYSTACK_SECRET_KEY}`);
+
 
 const BaseService = new baseService()
 
@@ -21,13 +27,16 @@ class customerService extends baseService {
     // Author: Effi Emmanuel
     async addProductsToCart(userId: any, productId: any, quantity: any) {
         const cart = await cartModel.findOne({ userId })
+        const prod = await productModel.findOne({ productId })
+        const amount = prod!.price * quantity
         if (!cart) {
             // Create a new cart document
             const newCartDoc = new cartModel({
                 userId,
                 products: [{
                     productId,
-                    quantity
+                    quantity,
+                    amount
                 }]
             })
 
@@ -45,11 +54,12 @@ class customerService extends baseService {
         } else {
             console.log('Cart:', product)
         }
-
+        const amount1 = product!.price * quantity
         // New product object
         const newProductToCart: any = {
             productId: product._id,
-            quantity: quantity
+            quantity: quantity,
+            amount: amount1,
         }
 
         // adding new product to cart and saving the document
@@ -109,15 +119,23 @@ class customerService extends baseService {
     async makeOrder(userId: any, cartId: any) {
         const user = await customerModel.findOne({ userId }).exec()
         const cart = await cartModel.findOne({ cartId }).exec()
+        const order1 = await orderModel.findOne({ userId, cartId }).exec()
+        const totalAmount = cart?.products.reduce((accumualtor, product: any) => {
+            return (accumualtor + (product.amount))
+        }, 0)
         if (!user) {
             throw new Error("User does not exist")
         }
         if (!cart) {
             throw new Error("Please add products to cart before making an order")
         }
+        if (order1) {
+            throw new Error("Order has already been placed")
+        }
         const order = new orderModel({
             userId: userId,
-            cartId: cartId
+            cartId: cartId,
+            amount: totalAmount
         })
         await order.save()
         await cartModel.findByIdAndDelete({ _id: cartId }).exec()
@@ -137,8 +155,43 @@ class customerService extends baseService {
         return
     }
 
-    async makePayment() {
+    async makePayment(orderId: any, email: any, name: any) {
+        const order = await orderModel.findById({ _id: orderId }).exec()
+        if (!order) {
+            throw new Error("Please make an order before proceeding to payment")
+        }
+        const totalAmount = order.amount * 100
+        const ref = randToken.generate(16)
+        const init = await p.transaction.initialize({
+            key: process.env.PAYSTACK_SECRET_KEY,
+            amount: totalAmount,
+            email: email,
+            name: name,
+            reference: ref
+        })
+        order.paymentReference = ref
+        await order.save()
+        return init
+    }
 
+    async verifyPayment(orderId: any) {
+        const order = await orderModel.findById({ _id: orderId }).exec()
+        const ref = order?.paymentReference
+        if (!ref) {
+            throw new Error("Please make your payment first before verifying")
+        }
+        const verify = await p.transaction.verify(ref)
+        if (verify) {
+            order.status = "Done!"
+            await order.save()
+        }
+        const transaction = new transactionModel({
+            userId: order.userId,
+            orderId: orderId
+        })
+        await transaction.save()
+
+        return
     }
 }
 
