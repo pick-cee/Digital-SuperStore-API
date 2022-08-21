@@ -49,3 +49,5 @@ The API was written in TypeScript which compiles down to JavaScript.
 1. Install all dependencies using:
    `npm install`
 2. Then start the server using: `npm run dev`
+
+<a href="https://documenter.getpostman.com/view/16987750/VUqptHrx">Postman documentation</a> - Documented by Akinloluwa Olumuyide.
