@@ -1,7 +1,7 @@
 import { Types, Schema, model } from "mongoose"
 import mongoose from "mongoose"
 
-const customerSchema = new Schema({
+const customerSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
