@@ -51,3 +51,5 @@ The API was written in TypeScript which compiles down to JavaScript.
 2. Then start the server using: `npm run dev`
 
 <a href="https://documenter.getpostman.com/view/16987750/VUqptHrx">Postman documentation</a> - Documented by Akinloluwa Olumuyide.
+
+<a href="https://digital-superstore-api-production.up.railway.app/">Live link to the API</a> - Deployed by Akinloluwa Olumuyide.
