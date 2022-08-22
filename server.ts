@@ -9,13 +9,17 @@ import adminRoutes from './routes/admin/adminRoutes'
 dotenv.config()
 const port = process.env.PORT
 
-process.env.NODE_ENV === 'development' ?
-    mongoose.connect(`${process.env.MONGODB_URI}`)
-        .then(() => { console.log("Local Db connected successfully!") })
-        .catch(err => { console.log(err) })
-    : mongoose.connect(`${process.env.MONGODB_URI_CLOUD}`)
-        .then(() => { console.log("Cluster Db connected successfully!") })
-        .catch(err => { console.log(err) })
+const connect = async () => {
+    process.env.NODE_ENV === 'development' ?
+        await mongoose.connect(`${process.env.MONGODB_URI}`)
+            .then(() => { console.log("Local Db connected successfully!") })
+            .catch(err => { console.log(err) })
+        : await mongoose.connect(`${process.env.MONGODB_URI_CLOUD}`)
+            .then(() => { console.log("Cluster Db connected successfully!") })
+            .catch(err => { console.log(err) })
+}
+
+connect();
 
 const app = express()
 app.use(express.json())
