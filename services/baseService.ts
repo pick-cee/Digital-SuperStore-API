@@ -113,6 +113,7 @@ class baseService {
 
         if (customer != undefined) {
             customer.isVerified = true
+            await customer.save()
         }
         await customer?.save()
         return
