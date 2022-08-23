@@ -96,6 +96,7 @@ class baseService {
         if (customer != undefined) {
             customer.password = hashedPassword;
         }
+        await customer?.save()
         return
     }
 
