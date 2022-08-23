@@ -99,12 +99,17 @@ class baseService {
         return
     }
 
-    async verifyEmail(id: string, token: string) {
-        this.#customer = await tokenModel.findOne({ id, token }).exec()
-        const customer = await customerModel.findOne({ id }).exec()
-        if (this.#customer.expiresIn! < new Date().getTime()) {
-            throw new Error("Token is expired!")
+    async verifyEmail(userId: string, token: string) {
+        const customer1 = await tokenModel.findOne({ userId, token }).exec()
+        const customer = await customerModel.findOne({ userId }).exec()
+        console.log(customer1);
+
+        if (customer1?.expiresIn != undefined) {
+            if (customer1?.expiresIn < new Date().getTime()) {
+                throw new Error("Token is expired!")
+            }
         }
+
         if (customer != undefined) {
             customer.isVerified = true
         }

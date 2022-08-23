@@ -131,9 +131,8 @@ export async function getById(request: express.Request, response: express.Respon
 
 export async function verifyEmail(request: express.Request, response: express.Response) {
     const userId = request.query.userId as string
-    const { token } = request.body
     try {
-        await CustomerService.verifyEmail(userId, token)
+        await CustomerService.verifyEmail(userId, request.body.token as string)
         return response.status(200).json({
             message: "User verified successfully"
         })
