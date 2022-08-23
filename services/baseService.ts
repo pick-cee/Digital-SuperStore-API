@@ -118,7 +118,7 @@ class baseService {
     }
 
     async resendToken(id: string, email: string) {
-        const customer = await customerModel.findOne({ id }).exec()
+        const customer = await customerModel.findOne({ email: email }).exec()
         if (customer != undefined) {
             email = customer.email
         }
@@ -135,7 +135,10 @@ class baseService {
             <p>Digital Superstore! </p><br><br>
         </div>
         `;
-        await sendmail(html, subject, email)
+
+        await sendmail(html, subject, customer.email)
+        console.log("Customer: ", customer)
+        console.log("email: ", customer?.email)
         return
     }
 
