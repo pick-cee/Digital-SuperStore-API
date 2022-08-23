@@ -28,6 +28,8 @@ The API was written in TypeScript which compiles down to JavaScript.
 14. Delete order
 15. Make payment
 16. Verify payment
+17. Search products
+18. Search a product by category
 
 ## List of endpoints created for the admin
 
@@ -39,6 +41,7 @@ The API was written in TypeScript which compiles down to JavaScript.
 6. Get all products
 7. Get all user monthly stats
 8. Get a user monthly stats
+9. Create admin
 
 ### Run the aplication
 
