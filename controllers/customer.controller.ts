@@ -297,3 +297,33 @@ export async function verifyPayment(request: express.Request, response: express.
         })
     }
 }
+
+export async function searchProduct(request: express.Request, response: express.Response) {
+    const search = request.query.search as string
+    try {
+        await CustomerService.searchProducts(search).then((data) => {
+            return response.status(200).json({
+                message: "Products found",
+                Data: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({ message: err.message })
+    }
+}
+
+export async function getProductsCategory(request: express.Request, response: express.Response) {
+    const category = request.query.category as string
+    try {
+        await CustomerService.getProductsFromCategory(category).then((data) => {
+            return response.status(200).json({
+                message: "Products found",
+                Data: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({ message: err.message })
+    }
+}

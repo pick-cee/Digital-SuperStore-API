@@ -4,6 +4,7 @@ import { sendmail } from "../helpers/mailer"
 import generateToken from '../helpers/generateToken'
 import passwordTokenModel from "../models/passwordToken.model";
 import tokenModel from "../models/token.model";
+import productModel from "../models/product.model";
 
 class baseService {
     #customer: any;
@@ -131,6 +132,16 @@ class baseService {
         `;
         await sendmail(html, subject, email)
         return
+    }
+
+    async getProductsFromCategory(search: string) {
+        const product = await productModel.find({ category: search }).limit(10).exec()
+        return product
+    }
+
+    async searchProducts(searchQuery: string) {
+        const product = await productModel.find({ name: { $regex: searchQuery, $options: 'i' } }).limit(10).exec()
+        return product
     }
 }
 

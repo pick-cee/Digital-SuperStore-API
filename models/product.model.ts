@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    categories: {
+        type: String,
+        enum: ["Clothing", "Electronics", "Groceries", "Footwear", "Wristwatch", "Phone accessories"],
+    },
     image: {
         type: String,
         required: false

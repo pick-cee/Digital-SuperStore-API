@@ -4,11 +4,39 @@ import customerModel from '../../models/customer.model';
 import orderModel from '../../models/order.model';
 import productModel from '../../models/product.model';
 import cloudinaryUpload from '../../helpers/cloudinary';
+import { passwordCompare, passwordHash } from '../../helpers/bcrypt';
 
 const BaseService = new baseService()
 
 class adminService extends baseService {
     #admin: any
+
+    async Register(name: any, email: any, password: any) {
+        if (!name && !email && !password) {
+            throw new Error('Name and email and password are required');
+        }
+        const admin = await adminModel.findOne({ email: email }).exec()
+        if (admin) { throw new Error('Admin already exists') }
+
+        const hashedPassword = await passwordHash(password)
+        const Admin = new adminModel({
+            name: name,
+            email: email,
+            password: hashedPassword,
+        })
+        Admin.save()
+        return Admin
+    }
+
+    async Authenticate(email: any, password: any) {
+        this.#admin = await adminModel.findOne({ email: email }).exec();
+        if (!this.#admin) throw new Error('Admin does not exist');
+
+        const matchPassword = await passwordCompare(password, this.#admin.password)
+        if (!matchPassword) return false;
+
+        return this.#admin
+    }
 
     async getAllUsers() {
         const users = await customerModel.find()
@@ -62,7 +90,7 @@ class adminService extends baseService {
         if (!product) {
             throw new Error('Produt cannot be found!')
         }
-        const { name, price, description } = data
+        const { name, price, description, categories } = data
 
 
         if (image) {
@@ -77,7 +105,7 @@ class adminService extends baseService {
         for (const field in data) {
             product[field] = data[field]
         }
-        await productModel.updateOne({ _id: productId }, { name, price, description, image }, { $new: true })
+        await productModel.updateOne({ _id: productId }, { name, price, description, image, categories }, { $new: true })
     }
 
     async getUserMonthlyStats(userId: any) {

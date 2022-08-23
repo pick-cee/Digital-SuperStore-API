@@ -4,22 +4,33 @@ import { jwtSign } from "../../helpers/auth";
 
 const AdminService = new adminService()
 
-export async function loginAdmin(request: express.Request, response: express.Response) {
-    const { email, password } = request.body
+export async function Register(request: express.Request, response: express.Response) {
     try {
-        const admin = await AdminService.authenticate(email, password)
-        if (!admin) {
-            return response.status(400).json({
-                message: "Invalid email or password"
+        const { name, email, password } = request.body
+        await AdminService.Register(name, email, password).then((data) => {
+            return response.status(200).json({
+                message: "Admin crated succesfully",
+                Data: data
             })
-        }
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function loginAdmin(request: express.Request, response: express.Response) {
+    try {
+        const admin = await AdminService.Authenticate(request.body.email, request.body.password)
         let payload = {
-            _id: admin._id,
-            email: admin.email,
+            _id: admin["_id"],
+            email: admin["email"],
         }
         const token = await jwtSign(payload)
         return response.status(200).json({
-            message: "User logged in successfully!",
+            message: "Admin logged in successfully!",
             token: token
         })
     }
