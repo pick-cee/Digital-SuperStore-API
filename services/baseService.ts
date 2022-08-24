@@ -149,11 +149,13 @@ class baseService {
 
     async getProductsFromCategory(search: string) {
         const product = await productModel.find({ category: search }).limit(10).exec()
+        if (!product) throw new Error("Products not found")
         return product
     }
 
     async searchProducts(searchQuery: string) {
         const product = await productModel.find({ name: { $regex: searchQuery, $options: 'i' } }).limit(10).exec()
+        if (!product) throw new Error("Products not found")
         return product
     }
 }
