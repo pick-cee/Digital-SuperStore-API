@@ -57,6 +57,7 @@ export async function loginCustomer(request: express.Request, response: express.
         let payload = {
             _id: customer._id,
             email: customer.email,
+            verified: customer.isVerified
         }
         const token = await jwtSign(payload)
         return response.status(200).json({

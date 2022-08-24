@@ -5,6 +5,7 @@ import orderModel from '../../models/order.model';
 import productModel from '../../models/product.model';
 import cloudinaryUpload from '../../helpers/cloudinary';
 import { passwordCompare, passwordHash } from '../../helpers/bcrypt';
+import { v2 as cloudinary } from 'cloudinary'
 
 const BaseService = new baseService()
 
@@ -67,6 +68,7 @@ class adminService extends baseService {
                     throw new Error(`CLOUDINARY ERROR => ${err.message}`)
                 })
         }
+
         await data.save()
         return
     }
@@ -87,12 +89,27 @@ class adminService extends baseService {
     }
 
     async updateProduct(productId: any, data: any, image: any) {
-        const product = await productModel.findById(productId) as any
+        const product = await productModel.findById({ _id: productId }) as any
         if (!product) {
             throw new Error('Produt cannot be found!')
         }
         const { name, price, description, categories } = data
 
+        // const url = product.image.path
+        const publicId = product.image.split('/')[6]
+        console.log('PUBLIC ID: ', publicId);
+
+        cloudinary.uploader.explicit(product.image.path, {
+            type: "private",
+            eager: [
+                { width: 200, crop: "scale" },
+                {
+                    width: 360, height: 200,
+                    crop: "crop", gravity: "north"
+                }]
+        }, function (err: any, result: any) {
+            console.log('RESULT: ', result);
+        })
 
         if (image) {
             await cloudinaryUpload(image.path)
