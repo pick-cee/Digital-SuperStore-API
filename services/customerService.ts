@@ -141,7 +141,7 @@ class customerService extends baseService {
     }
 
     async getAllProductsFromWishlist(userId: any) {
-        const wishlist = await wishlistModel.findOne({ userId }).exec()
+        const wishlist = await wishlistModel.find({ userId }).exec()
         if (!wishlist) {
             throw new Error("Wishlist is empty")
         }
