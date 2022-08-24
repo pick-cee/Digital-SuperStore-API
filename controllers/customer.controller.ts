@@ -302,13 +302,13 @@ export async function searchProduct(request: express.Request, response: express.
     const search = request.query.search as string
     try {
         const products = await CustomerService.searchProducts(search)
-        if (!products) {
+        if (products.length === 0) {
             return response.status(404).json({
                 message: "Products not found"
             })
         }
         return response.status(200).json({
-            message: "Producs found",
+            message: "Products found",
             products: products
         })
     }
