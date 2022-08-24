@@ -110,6 +110,9 @@ class baseService {
                 throw new Error("Token is expired!")
             }
         }
+        console.log(customer)
+
+        await customerModel.updateOne({ _id: userId }, { $set: { isVerified: true } }, { new: true }).exec()
 
         if (customer != undefined) {
             customer.isVerified = true
