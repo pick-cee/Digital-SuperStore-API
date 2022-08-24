@@ -72,7 +72,7 @@ class adminService extends baseService {
     }
 
     async getAllProducts() {
-        this.#admin = await productModel.find()
+        this.#admin = await productModel.find().limit(16).exec()
 
         return this.#admin
     }
