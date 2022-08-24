@@ -178,6 +178,25 @@ export async function addProductsToCart(request: express.Request, response: expr
     }
 }
 
+export async function addProductsToCartP(request: express.Request, response: express.Response) {
+    // const userId = request.query.userId as string
+    const userId = request.query.userId as string
+    const productId = request.query.productId as string
+
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.addProductsToCartP(userId, productId,)
+        return response.status(200).json({
+            message: "Products added to cart successfully",
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            messaage: err.message
+        })
+    }
+}
+
 export async function deleteProductsFromCart(request: express.Request, response: express.Response) {
     const userId = request.query.userId as string
     const productId = request.query.productId as string

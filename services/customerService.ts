@@ -69,6 +69,48 @@ class customerService extends baseService {
         return
     }
 
+    async addProductsToCartP(userId: any, productId: any) {
+        const cart = await cartModel.findOne({ userId })
+        const prod = await productModel.findOne({ productId })
+        const amount = prod!.price
+        if (!cart) {
+            // Create a new cart document
+            const newCartDoc = new cartModel({
+                userId,
+                products: [{
+                    productId,
+                    amount
+                }]
+            })
+
+            // Save document
+            await newCartDoc.save()
+            return
+        } else {
+            console.log('Cart:', cart)
+        }
+
+        // Check if product exists
+        const product = await productModel.findById(productId)
+        if (!product) {
+            throw new Error('Product is not available');
+        } else {
+            console.log('Cart:', product)
+        }
+        const amount1 = product!.price
+        // New product object
+        const newProductToCart: any = {
+            productId: product._id,
+            amount: amount1,
+        }
+
+        // adding new product to cart and saving the document
+        cart.products.push(newProductToCart)
+        cart?.save()
+
+        return
+    }
+
     // Author: Effi Emmanuel
     async removeProductsToCart(userId: any, productId: any) {
         const cart = await cartModel.findOne({ userId }).exec()
