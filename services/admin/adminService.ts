@@ -75,7 +75,7 @@ class adminService extends baseService {
     }
 
     async getAllProducts() {
-        this.#admin = await productModel.find().limit(16).exec()
+        this.#admin = await productModel.find().limit(12).exec()
 
         return this.#admin
     }
