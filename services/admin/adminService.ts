@@ -92,15 +92,13 @@ class adminService extends baseService {
     async updateProduct(productId: any, data: any, image: any) {
         const product = await productModel.findById({ _id: productId }) as any
         if (!product) {
-            throw new Error('Produt cannot be found!')
+            throw new Error('Product cannot be found!')
         }
-        const { name, price, description, categories } = data
 
         if (image) {
             await cloudinaryUpload(image.path)
                 .then((downloadURL: any) => {
-                    image.path = downloadURL as string
-                    product.image = image.path as string
+                    product.image = downloadURL as string
                 })
                 .catch((err: any) => {
                     throw new Error(`CLOUDINARY ERROR => ${err.message}`)
@@ -110,7 +108,7 @@ class adminService extends baseService {
         for (const field in data) {
             product[field] = data[field]
         }
-        await productModel.updateOne({ _id: productId }, { name, price, description, image, categories }, { $new: true })
+        await productModel.updateOne({ _id: productId }, product, { $new: true })
     }
 
     async getUserMonthlyStats(userId: any) {

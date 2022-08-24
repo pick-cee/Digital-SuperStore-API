@@ -113,15 +113,17 @@ export async function deleteProduct(request: express.Request, response: express.
 }
 
 export async function updateProduct(request: express.Request, response: express.Response) {
-    const productId = request.query.productId as string
-    let data;
-
-    if (request.fields) {
-        data = JSON.parse(request.fields.data as string);
-    }
-    const image = request.files?.file;
-
     try {
+        const productId = request.query.productId as string
+
+        let data;
+
+        if (request.fields && request.fields.data) {
+            data = JSON.parse(request.fields.data as string);
+        }
+
+        const image = request.files?.image;
+
         await AdminService.updateProduct(productId, data, image)
         return response.status(200).json({
             message: "Product updated succesfully",
