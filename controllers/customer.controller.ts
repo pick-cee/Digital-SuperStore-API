@@ -301,12 +301,15 @@ export async function verifyPayment(request: express.Request, response: express.
 export async function searchProduct(request: express.Request, response: express.Response) {
     const search = request.query.search as string
     try {
-        await CustomerService.searchProducts(search).then((data) => {
-            if (!data) { return response.status(404).json({ message: "No products found" }) }
-            return response.status(200).json({
-                message: "Products found",
-                Data: data
+        const products = await CustomerService.searchProducts(search)
+        if (!products) {
+            return response.status(404).json({
+                message: "Products not found"
             })
+        }
+        return response.status(200).json({
+            message: "Producs found",
+            products: products
         })
     }
     catch (err: any) {
