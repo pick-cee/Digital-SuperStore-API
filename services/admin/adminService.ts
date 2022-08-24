@@ -6,6 +6,7 @@ import productModel from '../../models/product.model';
 import cloudinaryUpload from '../../helpers/cloudinary';
 import { passwordCompare, passwordHash } from '../../helpers/bcrypt';
 import { v2 as cloudinary } from 'cloudinary'
+import { resourceLimits } from 'worker_threads';
 
 const BaseService = new baseService()
 
@@ -95,32 +96,17 @@ class adminService extends baseService {
         }
         const { name, price, description, categories } = data
 
-        // const url = product.image.path
-        const publicId = product.image.split('/')[6]
-        console.log('PUBLIC ID: ', publicId);
-
         if (image) {
-            return new Promise((resolve, reject) => {
-                cloudinary.uploader.upload(image, { public_id: publicId, invalidate: true }, function (err: any, result: any) {
-                    console.log('RESULT: ', result);
-                }).then((result: any) => {
-                    resolve(result.secure_url)
-                    console.log('RESULT secure url: ', result.secure_url);
-                }).catch((err: any) => {
-                    reject(err)
+            await cloudinaryUpload(image.path)
+                .then((downloadURL: any) => {
+                    image.path = downloadURL as string
+                    product.image = image.path as string
                 })
-            })
+                .catch((err: any) => {
+                    throw new Error(`CLOUDINARY ERROR => ${err.message}`)
+                })
         }
 
-        // if (image) {
-        //     await cloudinaryUpload(image.path)
-        //         .then((downloadURL: any) => {
-        //             product.image = downloadURL
-        //         })
-        //         .catch((err: any) => {
-        //             throw new Error(`CLOUDINARY ERROR => ${err.message}`)
-        //         })
-        // }
         for (const field in data) {
             product[field] = data[field]
         }
