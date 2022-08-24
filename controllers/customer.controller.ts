@@ -320,12 +320,15 @@ export async function searchProduct(request: express.Request, response: express.
 export async function getProductsCategory(request: express.Request, response: express.Response) {
     const category = request.query.category as string
     try {
-        await CustomerService.getProductsFromCategory(category).then((data) => {
-            if (!data) { return response.status(404).json({ message: "No products found" }) }
-            return response.status(200).json({
-                message: "Products found",
-                Data: data
+        const products = await CustomerService.getProductsFromCategory(category)
+        if (products.length === 0) {
+            return response.status(404).json({
+                message: "Products not found"
             })
+        }
+        return response.status(200).json({
+            message: "Products found",
+            products: products
         })
     }
     catch (err: any) {
