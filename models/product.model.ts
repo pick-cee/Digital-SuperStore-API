@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema({
         enum: ["Clothing", "Electronics", "Groceries", "Footwear", "Wristwatch", "Phone accessories"],
     },
     image: {
-        // type: String || Blob,
+        type: String, // change to object
         required: false
     }
 }, { timestamps: true })
