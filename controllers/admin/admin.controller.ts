@@ -63,15 +63,15 @@ export async function createProduct(request: express.Request, response: express.
         data = JSON.parse(request.fields.data as string);
     }
 
-    const { name, price, description } = data;
+    const { name, price, description, categories } = data;
 
     const image = request.files?.file;
     try {
-        await AdminService.createProduct(name, price, description, image)
+        await AdminService.createProduct(name, price, description, image, categories)
         return response.status(200).json({
             message: "Product added succesfully",
             data: {
-                name, price, description, image
+                name, price, description, categories, image
             }
         })
     }

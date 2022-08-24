@@ -46,14 +46,15 @@ class adminService extends baseService {
         return users
     }
 
-    async createProduct(name: any, price: any, description: any, image: any) {
-        if (!name && !price && !description) {
+    async createProduct(name: any, price: any, description: any, image: any, categories: any) {
+        if (!name && !price && !description && !image && !categories) {
             throw new Error("Please fill all fields")
         }
         const data: any = new productModel({
             name: name,
             price: price,
             description: description,
+            categories: categories,
             image: image
         })
 
