@@ -10,12 +10,12 @@ const router = express.Router()
 
 router.post('/createAdmin', Register)
 router.post('/loginAdmin', loginAdmin)
-router.get('/getUsers', verifyToken, getUsers)
-router.post('/createProduct', verifyToken, formidable(), createProduct)
-router.get('/getProduct', verifyToken, getAllProducts)
-router.delete('/deleteProduct', verifyToken, deleteProduct)
-router.put('/updateProduct', verifyToken, formidable(), updateProduct)
-router.get('/getUserStats', verifyToken, getUserStats)
+router.get('/getUsers', getUsers)
+router.post('/createProduct', formidable(), createProduct)
+router.get('/getProduct', getAllProducts)
+router.delete('/deleteProduct', deleteProduct)
+router.put('/updateProduct', formidable(), updateProduct)
+router.get('/getUserStats', getUserStats)
 router.get('/getAllUserStats', getAllUserStats)
 
 export default router 
