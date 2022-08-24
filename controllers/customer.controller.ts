@@ -147,7 +147,7 @@ export async function resendToken(request: express.Request, response: express.Re
     const userId = request.query.userId as string
 
     try {
-        await CustomerService.resendToken(userId, request.body.email as string)
+        await CustomerService.resendToken(userId, request.query.email as string)
         console.log(request.body.email);
         return response.status(200).json({
             message: "Token resent successfully!"

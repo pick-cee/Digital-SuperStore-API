@@ -99,27 +99,28 @@ class adminService extends baseService {
         const publicId = product.image.split('/')[6]
         console.log('PUBLIC ID: ', publicId);
 
-        cloudinary.uploader.explicit(product.image.path, {
-            type: "private",
-            eager: [
-                { width: 200, crop: "scale" },
-                {
-                    width: 360, height: 200,
-                    crop: "crop", gravity: "north"
-                }]
-        }, function (err: any, result: any) {
-            console.log('RESULT: ', result);
-        })
-
         if (image) {
-            await cloudinaryUpload(image.path)
-                .then((downloadURL: any) => {
-                    product.image = downloadURL
+            return new Promise((resolve, reject) => {
+                cloudinary.uploader.upload(image, { public_id: publicId, invalidate: true }, function (err: any, result: any) {
+                    console.log('RESULT: ', result);
+                }).then((result: any) => {
+                    resolve(result.secure_url)
+                    console.log('RESULT secure url: ', result.secure_url);
+                }).catch((err: any) => {
+                    reject(err)
                 })
-                .catch((err: any) => {
-                    throw new Error(`CLOUDINARY ERROR => ${err.message}`)
-                })
+            })
         }
+
+        // if (image) {
+        //     await cloudinaryUpload(image.path)
+        //         .then((downloadURL: any) => {
+        //             product.image = downloadURL
+        //         })
+        //         .catch((err: any) => {
+        //             throw new Error(`CLOUDINARY ERROR => ${err.message}`)
+        //         })
+        // }
         for (const field in data) {
             product[field] = data[field]
         }
