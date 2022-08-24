@@ -307,6 +307,9 @@ export async function searchProduct(request: express.Request, response: express.
                 Data: data
             })
         })
+            .catch(err => {
+                return response.status(500).json({ message: err.message })
+            })
     }
     catch (err: any) {
         return response.status(500).json({ message: err.message })
@@ -322,6 +325,9 @@ export async function getProductsCategory(request: express.Request, response: ex
                 Data: data
             })
         })
+            .catch(err => {
+                return response.status(500).json({ message: err.message })
+            })
     }
     catch (err: any) {
         return response.status(500).json({ message: err.message })
