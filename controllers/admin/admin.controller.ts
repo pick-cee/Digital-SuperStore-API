@@ -27,11 +27,13 @@ export async function loginAdmin(request: express.Request, response: express.Res
         let payload = {
             _id: admin["_id"],
             email: admin["email"],
+            name: admin["name"]
         }
         const token = await jwtSign(payload)
         return response.status(200).json({
             message: "Admin logged in successfully!",
-            token: token
+            token: token,
+            admin: payload
         })
     }
     catch (err: any) {

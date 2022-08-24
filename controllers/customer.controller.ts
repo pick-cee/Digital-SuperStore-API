@@ -62,7 +62,8 @@ export async function loginCustomer(request: express.Request, response: express.
         const token = await jwtSign(payload)
         return response.status(200).json({
             message: "User logged in successfully!",
-            token: token
+            token: token,
+            user: payload
         })
     }
     catch (err: any) {

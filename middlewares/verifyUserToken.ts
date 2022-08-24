@@ -1,6 +1,7 @@
 import { jwtVerify } from "../helpers/auth"
 import jwt from 'jsonwebtoken'
 import express from 'express'
+import customerModel from "../models/customer.model";
 
 export default async function verifyToken(request: express.Request, response: express.Response, next: express.NextFunction) {
     try {
@@ -8,9 +9,13 @@ export default async function verifyToken(request: express.Request, response: ex
         let result
         if (authHeader) {
             const token = authHeader.split(' ')[1]
-            jwt.verify(token, `${process.env.JWT_SECRET}`, (err, user) => {
+            jwt.verify(token, `${process.env.JWT_SECRET}`, async (err, user: any) => {
                 if (err) return response.status(403).json({ message: "Invalid bearer token" })
-                next()
+                const userExists = await customerModel.findById(user._id).exec()
+                if (userExists) {
+                    request.user = user
+                    next()
+                }
             })
         }
         else {
