@@ -132,6 +132,23 @@ class customerService extends baseService {
         if (notInCart) throw new Error('Invalid action. Product is not in your cart!')
     }
 
+    async getAllProductsFromCart(userId: any) {
+        const cart = await cartModel.findOne({ userId }).exec()
+        if (!cart) {
+            throw new Error("Cart is empty")
+        }
+        return cart
+    }
+
+    async getAllProductsFromWishlist(userId: any) {
+        const wishlist = await wishlistModel.findOne({ userId }).exec()
+        if (!wishlist) {
+            throw new Error("Wishlist is empty")
+        }
+
+        return wishlist
+    }
+
     async addProductsToWishlist(userId: any, productId: any) {
         const wishlistExists = await wishlistModel.findOne({ userId, productId })
         const product = await productModel.findOne({ productId }).exec()

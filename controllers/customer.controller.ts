@@ -197,6 +197,40 @@ export async function addProductsToCartP(request: express.Request, response: exp
     }
 }
 
+export async function getAllProductsFromCart(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    try {
+        await CustomerService.getAllProductsFromCart(userId).then((data) => {
+            return response.status(200).json({
+                message: "Products found",
+                Data: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function getProductsFromWishlist(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    try {
+        await CustomerService.getAllProductsFromWishlist(userId).then((data) => {
+            return response.status(200).json({
+                message: "Wishlist fetched succesfully!",
+                Data: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 export async function deleteProductsFromCart(request: express.Request, response: express.Response) {
     const userId = request.query.userId as string
     const productId = request.query.productId as string
