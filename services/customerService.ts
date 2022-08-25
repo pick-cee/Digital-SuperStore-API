@@ -310,7 +310,7 @@ class customerService extends baseService {
             return data
         })
         await cartModel.findByIdAndDelete({ _id: cartId }).exec()
-        return { checkout }
+        return { checkout, order }
     }
 
     async verifyPayment(orderId: any) {
