@@ -4,18 +4,18 @@ import {
     getUserStats, loginAdmin, Register, updateProduct
 } from '../../controllers/admin/admin.controller'
 import formidable from 'express-formidable'
-import verifyToken from '../../middlewares/verifyUserToken'
+import { verifyAdminToken } from '../../middlewares/verifyUserToken'
 
 const router = express.Router()
 
 router.post('/createAdmin', Register)
 router.post('/loginAdmin', loginAdmin)
-router.get('/getUsers', getUsers)
-router.post('/createProduct', formidable(), createProduct)
-router.get('/getProduct', getAllProducts)
-router.delete('/deleteProduct', deleteProduct)
-router.put('/updateProduct', formidable(), updateProduct)
-router.get('/getUserStats', getUserStats)
-router.get('/getAllUserStats', getAllUserStats)
+router.get('/getUsers', verifyAdminToken, getUsers)
+router.post('/createProduct', verifyAdminToken, formidable(), createProduct)
+router.get('/getProduct', verifyAdminToken, getAllProducts)
+router.delete('/deleteProduct', verifyAdminToken, deleteProduct)
+router.put('/updateProduct', verifyAdminToken, formidable(), updateProduct)
+router.get('/getUserStats', verifyAdminToken, getUserStats)
+router.get('/getAllUserStats', verifyAdminToken, getAllUserStats)
 
 export default router 

@@ -7,7 +7,7 @@ import {
     makePayment, verifyPayment, searchProduct, getProductsCategory, addProductsToCartP,
     getAllProductsFromCart, getProductsFromWishlist
 } from '../controllers/customer.controller'
-import verifyToken from '../middlewares/verifyUserToken'
+import { verifyToken } from '../middlewares/verifyUserToken'
 
 const router = express.Router()
 
