@@ -306,9 +306,11 @@ class customerService extends baseService {
             amount: totalAmount
         })
         await order.save()
-        await this.makePayment(order._id, user.email, user.name)
+        const checkout = await this.makePayment(order._id, user.email, user.name).then((data) => {
+            return data
+        })
         await cartModel.findByIdAndDelete({ _id: cartId }).exec()
-        return
+        return { checkout }
     }
 
     async verifyPayment(orderId: any) {
