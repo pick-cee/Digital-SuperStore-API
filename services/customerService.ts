@@ -145,6 +145,7 @@ class customerService extends baseService {
         if (!product) {
             throw new Error("Product does not exist")
         }
+        return product
     }
 
     async getAllProductsFromWishlist(userId: any) {
