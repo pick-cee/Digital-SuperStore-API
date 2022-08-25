@@ -284,6 +284,33 @@ class customerService extends baseService {
         return init
     }
 
+    async makeOrder2(userId: any, cartId: any) {
+        const user = await customerModel.findOne({ userId }).exec()
+        const cart = await cartModel.findOne({ cartId }).exec()
+        const order1 = await orderModel.findOne({ userId, cartId }).exec()
+        const totalAmount = cart?.products.reduce((accumualtor, product: any) => {
+            return (accumualtor + (product.amount))
+        }, 0)
+        if (!user) {
+            throw new Error("User does not exist")
+        }
+        if (!cart) {
+            throw new Error("Please add products to cart before making an order")
+        }
+        if (order1) {
+            throw new Error("Order has already been placed")
+        }
+        const order = new orderModel({
+            userId: userId,
+            cartId: cartId,
+            amount: totalAmount
+        })
+        await order.save()
+        await this.makePayment(order._id, user.email, user.name)
+        await cartModel.findByIdAndDelete({ _id: cartId }).exec()
+        return
+    }
+
     async verifyPayment(orderId: any) {
         const order = await orderModel.findById({ _id: orderId }).exec()
         const ref = order?.paymentReference

@@ -323,6 +323,7 @@ export async function makeOrder(request: express.Request, response: express.Resp
     try {
         await isEmailVerified(userId)
         await CustomerService.makeOrder(userId, cartId)
+
         return response.status(200).json({
             message: "Order made successfully"
         })
@@ -386,6 +387,45 @@ export async function makePayment(request: express.Request, response: express.Re
         })
     }
 }
+export async function makePayment1(request: express.Request, response: express.Response) {
+    const orderId = request.query.orderId as string
+    const { email, name } = request.body
+    try {
+        await CustomerService.makePayment(orderId, email, name).then((data) => {
+            return response.status(200).json({
+                message: "Payment made successfully",
+                Data: data
+            })
+
+        })
+
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function checkout(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    const cartId = request.query.cartId as string
+    try {
+        await CustomerService.makeOrder2(userId, cartId).then((data) => {
+            return response.status(200).json({
+                message: "Payment made successfully",
+                Data: data
+            })
+
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 export async function verifyPayment(request: express.Request, response: express.Response) {
     const orderId = request.query.orderId as string
     try {
