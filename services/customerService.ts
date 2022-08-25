@@ -103,12 +103,14 @@ class customerService extends baseService {
             console.log('Cart:', product)
         }
         const amount1 = product!.price
+        const image1 = product!.image
+        const name1 = product!.name
         // New product object
         const newProductToCart: any = {
             productId: product._id,
             quantity: 1,
-            image,
-            name,
+            image1,
+            name1,
             amount: amount1,
         }
 
