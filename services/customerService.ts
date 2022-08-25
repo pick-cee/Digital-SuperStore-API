@@ -73,13 +73,18 @@ class customerService extends baseService {
         const cart = await cartModel.findOne({ userId })
         const prod = await productModel.findOne({ productId })
         const amount = prod!.price
+        const image = prod!.image
+        const name = prod!.name
         if (!cart) {
             // Create a new cart document
             const newCartDoc = new cartModel({
                 userId,
                 products: [{
                     productId,
-                    amount
+                    quantity: 1,
+                    amount,
+                    image,
+                    name
                 }]
             })
 
@@ -101,6 +106,9 @@ class customerService extends baseService {
         // New product object
         const newProductToCart: any = {
             productId: product._id,
+            quantity: 1,
+            image,
+            name,
             amount: amount1,
         }
 
@@ -207,6 +215,39 @@ class customerService extends baseService {
         await order.save()
         await cartModel.findByIdAndDelete({ _id: cartId }).exec()
         return
+    }
+    async makeOrder1(userId: any) {
+        const user = await customerModel.findOne({ userId }).exec()
+        const cart = await cartModel.findOne({ userId }).exec()
+        const order1 = await orderModel.findOne({ userId }).exec()
+        const totalAmount = cart?.products.reduce((accumualtor, product: any) => {
+            return (accumualtor + (product.amount))
+        }, 0)
+        if (!user) {
+            throw new Error("User does not exist")
+        }
+        if (!cart) {
+            throw new Error("Please add products to cart before making an order")
+        }
+        if (order1) {
+            throw new Error("Order has already been placed")
+        }
+        const order = new orderModel({
+            userId: userId,
+            cartId: cart._id,
+            amount: totalAmount
+        })
+        await order.save()
+        await cartModel.findByIdAndDelete({ _id: cart._id }).exec()
+        return
+    }
+
+    async getCartByUserId(userId: any) {
+        const cart = await cartModel.findOne({ userId }).exec()
+        if (!cart) {
+            throw new Error("Cart not found")
+        }
+        return cart
     }
 
     async deleteOrder(userId: any, orderId: any) {

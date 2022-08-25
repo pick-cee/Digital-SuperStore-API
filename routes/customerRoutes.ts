@@ -5,7 +5,7 @@ import {
     addProductsToCart, deleteProductsFromCart, addProductsToWishlist,
     deleteProductsFromWishlist, makeOrder, deleteOrder,
     makePayment, verifyPayment, searchProduct, getProductsCategory, addProductsToCartP,
-    getAllProductsFromCart, getProductsFromWishlist, getProductsById
+    getAllProductsFromCart, getProductsFromWishlist, getProductsById, getCartByUserId
 } from '../controllers/customer.controller'
 import { verifyToken } from '../middlewares/verifyUserToken'
 
@@ -23,6 +23,7 @@ router.post('/addProductsToCart', addProductsToCart)
 router.post('/addProductsToCartP', addProductsToCartP)
 router.get('/getProductsById', getProductsById)
 router.get('/getProductsFromCart', getAllProductsFromCart)
+router.get('/getCartById', getCartByUserId)
 router.get('/getProductsFromWishlist', getProductsFromWishlist)
 router.delete('/removeProductsFromCart', deleteProductsFromCart)
 router.post('/addProductsToWishlist', addProductsToWishlist)

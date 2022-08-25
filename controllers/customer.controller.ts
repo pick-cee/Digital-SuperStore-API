@@ -266,6 +266,23 @@ export async function deleteProductsFromCart(request: express.Request, response:
     }
 }
 
+export async function getCartByUserId(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    try {
+        await CustomerService.getCartByUserId(userId).then((data) => {
+            return response.status(200).json({
+                message: "Cart fetched successfully",
+                Data: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 export async function addProductsToWishlist(request: express.Request, response: express.Response) {
     const userId = request.query.userId as string
     const productId = request.query.productId as string
@@ -306,6 +323,22 @@ export async function makeOrder(request: express.Request, response: express.Resp
     try {
         await isEmailVerified(userId)
         await CustomerService.makeOrder(userId, cartId)
+        return response.status(200).json({
+            message: "Order made successfully"
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function makeOrder1(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.makeOrder1(userId)
         return response.status(200).json({
             message: "Order made successfully"
         })
