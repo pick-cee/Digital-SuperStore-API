@@ -56,6 +56,7 @@ export async function loginCustomer(request: express.Request, response: express.
         }
         let payload = {
             _id: customer._id,
+            name: customer.name,
             email: customer.email,
             verified: customer.isVerified
         }
