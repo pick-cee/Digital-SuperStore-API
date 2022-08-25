@@ -109,8 +109,8 @@ class customerService extends baseService {
         const newProductToCart: any = {
             productId: product._id,
             quantity: 1,
-            image1,
-            name1,
+            image: image1,
+            name: name1,
             amount: amount1,
         }
 
