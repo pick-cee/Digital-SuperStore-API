@@ -215,6 +215,23 @@ export async function getAllProductsFromCart(request: express.Request, response:
     }
 }
 
+export async function getProductsById(request: express.Request, response: express.Response) {
+    const productId = request.query.productId as string
+    try {
+        await CustomerService.getProductsById(productId).then((data) => {
+            return response.status(200).json({
+                message: "Product fetched successfully",
+                Product: data
+            })
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 export async function getProductsFromWishlist(request: express.Request, response: express.Response) {
     const userId = request.query.userId as string
     try {

@@ -140,6 +140,13 @@ class customerService extends baseService {
         return cart
     }
 
+    async getProductsById(productId: any) {
+        const product = await productModel.findById({ _id: productId }).exec()
+        if (!product) {
+            throw new Error("Product does not exist")
+        }
+    }
+
     async getAllProductsFromWishlist(userId: any) {
         const wishlist = await wishlistModel.find({ userId }).exec()
         if (!wishlist) {
