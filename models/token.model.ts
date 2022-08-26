@@ -12,7 +12,7 @@ const tokenSchema = new mongoose.Schema(
         },
         expiresIn: {
             type: Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate(), new Date().getUTCHours(), new Date().getUTCMinutes(), new Date().getUTCSeconds() + 600000),
-            default: new Date().setTime(new Date().getTime() + 600000),
+            default: new Date().setTime(new Date().getTime() + 600000), // 10 minutes
         },
     },
     { timestamps: true }
