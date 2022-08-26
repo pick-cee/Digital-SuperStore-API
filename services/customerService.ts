@@ -107,9 +107,6 @@ class customerService extends baseService {
         const image1 = product!.image
         const name1 = product!.name
         // New product object
-        if (cart1) {
-            throw new Error("Products alredy exists in cart")
-        }
         const newProductToCart: any = {
             productId: product._id,
             quantity: 1,
