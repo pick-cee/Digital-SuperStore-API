@@ -97,6 +97,7 @@ class customerService extends baseService {
 
         // Check if product exists
         const product = await productModel.findById(productId)
+        const cart1 = await cartModel.findOne(productId).exec()
         if (!product) {
             throw new Error('Product is not available');
         } else {
@@ -106,6 +107,9 @@ class customerService extends baseService {
         const image1 = product!.image
         const name1 = product!.name
         // New product object
+        if (cart1) {
+            throw new Error("Products alredy exists in cart")
+        }
         const newProductToCart: any = {
             productId: product._id,
             quantity: 1,
@@ -335,6 +339,38 @@ class customerService extends baseService {
         await transaction.save()
 
         return
+    }
+
+    async makeOrder3(userId: any, cartId: any) {
+        const user = await customerModel.findOne({ userId }).exec()
+        const cart = await cartModel.findOne({ cartId }).exec()
+        const order1 = await orderModel.findOne({ userId, cartId }).exec()
+        const totalAmount = cart?.products.reduce((accumualtor, product: any) => {
+            return (accumualtor + (product.amount))
+        }, 0)
+        if (!user) {
+            throw new Error("User does not exist")
+        }
+        if (!cart) {
+            throw new Error("Please add products to cart before making an order")
+        }
+        if (order1) {
+            throw new Error("Order has already been placed")
+        }
+        const order = new orderModel({
+            userId: userId,
+            cartId: cartId,
+            amount: totalAmount
+        })
+        await order.save()
+        const checkout = await this.makePayment(order._id, user.email, user.name).then((data) => {
+            return data
+        })
+        const verify = await this.verifyPayment(order._id).then((data) => {
+            return data
+        })
+        await cartModel.findByIdAndDelete({ _id: cartId }).exec()
+        return { checkout, order, verify }
     }
 }
 
