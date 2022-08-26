@@ -97,7 +97,6 @@ class customerService extends baseService {
 
         // Check if product exists
         const product = await productModel.findById(productId)
-        const cart1 = await cartModel.findOne(productId).exec()
         if (!product) {
             throw new Error('Product is not available');
         } else {
