@@ -267,6 +267,10 @@ class customerService extends baseService {
 
     async makePayment(orderId: any, email: any, name: any) {
         const order = await orderModel.findById({ _id: orderId }).exec()
+        const user1 = order?.userId
+        const user = await customerModel.findOne({ user1 }).exec()
+        email = user?.email as any
+        name = user?.name as any
         if (!order) {
             throw new Error("Please make an order before proceeding to payment")
         }
