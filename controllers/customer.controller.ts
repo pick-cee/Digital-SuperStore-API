@@ -301,6 +301,24 @@ export async function addProductsToWishlist(request: express.Request, response: 
     }
 }
 
+export async function addProductsToWishlistP(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    const productId = request.query.productId as string
+    try {
+        await isEmailVerified(userId)
+        const p = await CustomerService.addProductsToWishlistP(userId, productId).then(data => { return data })
+        return response.status(200).json({
+            message: "Product added to wishlist successfully",
+            Wishlist: p
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 export async function deleteProductsFromWishlist(request: express.Request, response: express.Response) {
     const userId = request.query.userId as string
     const productId = request.query.productId as string
@@ -309,6 +327,23 @@ export async function deleteProductsFromWishlist(request: express.Request, respo
         await CustomerService.deleteProductsFromWishlist(userId, productId)
         return response.status(200).json({
             message: "Product removed from wishlist successfully"
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function deleteProductsFromWishlistP(request: express.Request, response: express.Response) {
+    const userId = request.query.userId as string
+    const productId = request.query.productId as string
+    try {
+        await isEmailVerified(userId)
+        await CustomerService.removeProductsToWishlistP(userId, productId)
+        return response.status(200).json({
+            message: "Products removed from wishlist successfully"
         })
     }
     catch (err: any) {

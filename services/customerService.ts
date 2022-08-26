@@ -167,6 +167,57 @@ class customerService extends baseService {
         return wishlist
     }
 
+    async addProductsToWishlistP(userId: any, productId: any) {
+        const wishlist = await wishlistModel.findOne({ userId })
+        const prod = await productModel.findOne({ productId })
+        const amount = prod!.price
+        const image = prod!.image
+        const name = prod!.name
+        if (!wishlist) {
+            // Create a new cart document
+            const newWishlistDoc = new wishlistModel({
+                userId,
+                products: [{
+                    productId,
+                    amount,
+                    image,
+                    name
+                }]
+            })
+
+            // Save document
+            await newWishlistDoc.save()
+            return
+        } else {
+            console.log('Cart:', wishlist)
+        }
+
+        // Check if product exists
+        const product = await productModel.findById(productId)
+        if (!product) {
+            throw new Error('Product is not available');
+        } else {
+            console.log('Cart:', product)
+        }
+        const amount1 = product!.price
+        const image1 = product!.image
+        const name1 = product!.name
+        // New product object
+        const newProductToCart: any = {
+            productId: product._id,
+            quantity: 1,
+            image: image1,
+            name: name1,
+            amount: amount1,
+        }
+
+        // adding new product to cart and saving the document
+        wishlist.products.push(newProductToCart)
+        wishlist?.save()
+
+        return
+    }
+
     async addProductsToWishlist(userId: any, productId: any) {
         const wishlistExists = await wishlistModel.findOne({ userId, productId })
         const product = await productModel.findOne({ productId }).exec()
@@ -191,6 +242,26 @@ class customerService extends baseService {
         }
         await wishlistModel.findOneAndDelete({ userId, productId }).exec()
         return
+    }
+
+    async removeProductsToWishlistP(userId: any, productId: any) {
+        const wishlist = await wishlistModel.findOne({ userId }).exec()
+
+        if (!wishlist) throw new Error('Invalid action. Wishlist is empty!');
+
+
+        let notInCart: Boolean = true
+
+        wishlist?.products.forEach((product, index) => {
+            if (product.productId == productId) {
+                notInCart = false
+                wishlist.products.splice(index, 1)
+                wishlist.save()
+                return
+            }
+        })
+
+        if (notInCart) throw new Error('Invalid action. Product is not in your wishlist!')
     }
 
     async makeOrder(userId: any, cartId: any) {
