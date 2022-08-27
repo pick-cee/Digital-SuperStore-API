@@ -7,7 +7,7 @@ const AdminService = new adminService()
 export async function Register(request: express.Request, response: express.Response) {
     try {
         const { name, email, password } = request.body
-        await AdminService.Register(name, email, password).then((data) => {
+        await AdminService.register(name, email, password).then((data) => {
             return response.status(200).json({
                 message: "Admin crated succesfully",
                 Data: data
@@ -23,7 +23,7 @@ export async function Register(request: express.Request, response: express.Respo
 
 export async function loginAdmin(request: express.Request, response: express.Response) {
     try {
-        const admin = await AdminService.Authenticate(request.body.email, request.body.password)
+        const admin = await AdminService.authenticate(request.body.email, request.body.password)
         let payload = {
             _id: admin["_id"],
             email: admin["email"],

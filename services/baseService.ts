@@ -9,7 +9,7 @@ import productModel from "../models/product.model";
 class baseService {
     #customer: any;
 
-    async register(name: string, email: string, password: string) {
+    async register(name: string, email: string, password: string): Promise<any> {
         if (!name && !email && !password) {
             throw new Error('Name and email and password are required');
         }
@@ -25,7 +25,7 @@ class baseService {
         return customer
     }
 
-    async authenticate(email: string, password: string) {
+    async authenticate(email: string, password: string): Promise<any> {
         this.#customer = await customerModel.findOne({ email: email }).exec();
         if (!this.#customer) return false;
 

@@ -10,10 +10,13 @@ import { resourceLimits } from 'worker_threads';
 
 const BaseService = new baseService()
 
+// INHERITANCE: from baseService
 class adminService extends baseService {
+    // ABSTRACTION: Attribute hiding || encapsulation
     #admin: any
 
-    async Register(name: any, email: any, password: any) {
+    // POLYMORPHISM: Method overriding from baseService
+    async register(name: any, email: any, password: any): Promise<any> {
         if (!name && !email && !password) {
             throw new Error('Name and email and password are required');
         }
@@ -30,7 +33,8 @@ class adminService extends baseService {
         return Admin
     }
 
-    async Authenticate(email: any, password: any) {
+    // POLYMORPHISM: Method overriding from baseService
+    async authenticate(email: any, password: any): Promise<any> {
         this.#admin = await adminModel.findOne({ email: email }).exec();
         if (!this.#admin) throw new Error('Admin does not exist');
 

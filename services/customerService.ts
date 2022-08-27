@@ -23,9 +23,8 @@ class customerService extends baseService {
         return this.#product
     }
 
-
     // Author: Effi Emmanuel
-    async addProductsToCart(userId: any, productId: any, quantity: any) {
+    async addProductsToCart(userId: any, productId: any, quantity: number) {
         const cart = await cartModel.findOne({ userId })
         const prod = await productModel.findOne({ productId })
         const amount = prod!.price * quantity
@@ -69,7 +68,7 @@ class customerService extends baseService {
         return
     }
 
-    async addProductsToCartP(userId: any, productId: any) {
+    async addProductsToCartP(userId: any, productId: string) {
         const cart = await cartModel.findOne({ userId })
         const prod = await productModel.findOne({ productId })
         const amount = prod!.price
