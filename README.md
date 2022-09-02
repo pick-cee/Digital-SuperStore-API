@@ -26,10 +26,12 @@ The API was written in TypeScript which compiles down to JavaScript.
 12. Get by id
 13. Make Order
 14. Delete order
-15. Make payment
+15. Make payment/Checkout cart
 16. Verify payment
 17. Search products
 18. Search a product by category
+
+<b>NOTE</b>: There are some endpoints with the same name but with different functions. It was all used for developemnt purposes.
 
 ## List of endpoints created for the admin
 
@@ -56,3 +58,5 @@ The API was written in TypeScript which compiles down to JavaScript.
 <a href="https://documenter.getpostman.com/view/16987750/VUqptHrx">Postman documentation</a> - Documented by Akinloluwa Olumuyide.
 
 <a href="https://digital-superstore-api-production.up.railway.app/">Live link to the API</a> - Deployed by Akinloluwa Olumuyide.
+
+<a href="https://ds-ecommerce.vercel.app/">Link to the full application</a> - Designed and deployed by Effi Emmanuel.
