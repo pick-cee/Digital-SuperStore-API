@@ -72,6 +72,7 @@ class baseService {
         const passwordToken = new passwordTokenModel({
             token: token,
             userId: this.#customer._id,
+            expiresIn: new Date().getTime() + 600000
         })
         await passwordToken.save()
         return

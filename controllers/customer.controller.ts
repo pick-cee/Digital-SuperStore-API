@@ -22,6 +22,7 @@ export async function registerCustomer(request: express.Request, response: expre
         const customer = await CustomerService.register(name, email, password)
         await customer.save()
         const random = await generateToken(customer._id)
+
         let subject = "DIGITAL SUPERSTORE";
         let html = `
         <br /><div style="flex-direction:column; justify-content:center; align-items:center;">

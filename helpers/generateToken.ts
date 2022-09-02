@@ -6,7 +6,8 @@ export default async function generateToken(userId: any) {
     let random = randToken.generate(10);
     const token = new tokenModel({
         token: random,
-        userId: userId
+        userId: userId,
+        expiresIn: new Date().getTime() + 600000,
     })
     const customer = await customerModel.findByIdAndUpdate(userId, { token: random });
     await token.save()
