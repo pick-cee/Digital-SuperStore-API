@@ -12,7 +12,7 @@ const passTokenSchema = new mongoose.Schema(
         },
         expiresIn: {
             type: mongoose.Schema.Types.Date,
-            default: Date.now() + 1140000
+            default: new Date().setTime(Date.now() + 1140000)
         },
     },
     { timestamps: true }
