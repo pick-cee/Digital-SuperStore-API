@@ -11,8 +11,8 @@ const tokenSchema = new mongoose.Schema(
             ref: "users",
         },
         expiresIn: {
-            type: Date,
-            default: new Date().setTime(new Date().getTime() + 11400000)
+            type: mongoose.Schema.Types.Date,
+            default: Date.now() + 1140000
         },
     },
     { timestamps: true }
